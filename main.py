@@ -55,22 +55,13 @@ def run_sentiment_analysis_system(keywords: list[str]):
         # If not END, the key is the node name, and value is its output (updates to state)
         # The app automatically merges this into the main state for the next node.
 
+    
     print("\n🏁 CryptoSentinator Run Finished 🏁")
     if final_state:
         print("\n--- Final Market Insights ---")
         if final_state.get("market_insights"):
             for insight in final_state["market_insights"]:
                 pprint.pprint(insight, indent=2)
-                
-       #elif final_state.get("processed_documents"):
-           # print("No market insights generated, but processed documents are available:")
-            #for doc in final_state["processed_documents"]:
-                #pprint.pprint(doc, indent=2)
-        #elif final_state.get("raw_documents"):
-            #print("No market insights or processed documents, but raw documents are available:")
-            #for doc in final_state["raw_documents"]:
-                #pprint.pprint(doc, indent=2)
-                
         elif final_state.get("error_message"):
             print(f"An error occurred: {final_state['error_message']}")
         else:
