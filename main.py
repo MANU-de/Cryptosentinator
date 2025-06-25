@@ -34,21 +34,26 @@ def run_sentiment_analysis_system(keywords: list[str]):
     workflow.set_entry_point("data_harvester")
     workflow.add_edge("data_harvester", "nlp_processor")
     workflow.add_edge("nlp_processor", "market_correlator")
-    workflow.add_edge("market_correlator", END) # End of the process
+    workflow.add_edge("market_correlator", END)
 
     # Compile the graph
     app = workflow.compile()
 
     # Run the graph
-    initial_state = {"keywords": keywords, "raw_documents": [], "processed_documents": [], "market_insights": []}
+    initial_state = {
+        "keywords": keywords,  # Must be a non-empty list
+        "raw_documents": [],
+        "processed_documents": [],
+        "market_insights": []
+    }
     
     print(f"\n🚀 Starting CryptoSentinator for keywords: {keywords} 🚀\n")
     
     final_state = None
     # LangGraph can stream events, here we just get the final state
-    for s in app.stream(initial_state, {"recursion_limit": 10}): # Added recursion_limit
+    for s in app.stream(initial_state, {"recursion_limit": 50}):
         print(f"\n--- Current State after node: {list(s.keys())[0]} ---")
-        # pprint.pprint(s) # To see the full state transition (can be verbose)
+        pprint.pprint(s)
         if END in s: # Check if the graph has finished
             final_state = s[END]
             break
@@ -89,7 +94,7 @@ if __name__ == "__main__":
     # by creating a runner script outside or using `python -m`
     
     # Test run:
-    target_keywords = ["Bitcoin", "Ethereum"]
+    target_keywords = ["Bitcoin", "Ethereum", "Litecoin"]  # Example keywords
     # To run from inside the 'cryptosentinator' directory (adjusting imports):
     # Change relative imports e.g. from .graph_state import GraphState to from graph_state import GraphState
     # For now, let's assume you'll run with `python -m cryptosentinator.main` from parent dir.

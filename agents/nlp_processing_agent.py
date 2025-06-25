@@ -45,6 +45,8 @@ class NlpProcessingAgent:
                 ))
         
         print(f"Processed {len(processed_docs)} documents with NLP.")
-        return {"processed_documents": processed_docs}
+        if processed_docs:
+            return {"processed_documents": processed_docs}
+        return {"error_message": "Something went wrong"}
 
 nlp_processing_agent = NlpProcessingAgent()
