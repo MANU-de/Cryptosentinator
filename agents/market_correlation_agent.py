@@ -10,6 +10,8 @@ class MarketCorrelationAgent:
 
     def run(self, state: GraphState) -> dict:
         print("--- AGENT: Market Correlation Running ---")
+       # print("Received processed_documents:", state.get("processed_documents"))
+        print("Received keywords:", state.get("keywords"))
         processed_documents = state.get("processed_documents", [])
         # In a real system, you'd iterate through relevant cryptocurrencies
         # For this demo, let's assume we are interested in the keywords provided initially

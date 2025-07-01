@@ -81,7 +81,7 @@ if __name__ == "__main__":
     # Example usage:
     # Create a .env file in the cryptosentinator directory with your GEMINI_API_KEY
     # Example .env content:
-    # OPENAI_API_KEY="sk-your-openai-api-key"
+    # GEMINI_API_KEY="sk-your-gemini-api-key"
     
     # To run from the parent directory of cryptosentinator:
     # python -m cryptosentinator.main
@@ -94,13 +94,13 @@ if __name__ == "__main__":
     # by creating a runner script outside or using `python -m`
     
     # Test run:
-    target_keywords = ["Bitcoin", "Ethereum", "Litecoin"]  # Example keywords
+    target_keywords = ["Bitcoin", "Ethereum"]  # Example keywords
     # To run from inside the 'cryptosentinator' directory (adjusting imports):
     # Change relative imports e.g. from .graph_state import GraphState to from graph_state import GraphState
     # For now, let's assume you'll run with `python -m cryptosentinator.main` from parent dir.
     results = run_sentiment_analysis_system(target_keywords)
     
     # If you want to print the full final state:
-     #if results:
-        #print("\n--- Full Final State ---")
-         #pprint.pprint(results, indent=2)
+    if results:
+        print("\n--- Full Final State ---")
+        pprint.pprint(results, indent=2)
