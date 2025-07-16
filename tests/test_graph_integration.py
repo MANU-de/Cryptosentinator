@@ -6,7 +6,7 @@ from cryptosentinator.main import run_sentiment_analysis_system
 
 # Mark this module to be skipped if the API key is not present,
 # as the full run invokes the NLP tool which requires the key.
-pytestmark = pytest.mark.skipif(not os.getenv("OPENAI_API_KEY"), reason="OPENAI_API_KEY not set for integration test")
+pytestmark = pytest.mark.skipif(not os.getenv("GEMINI_API_KEY"), reason="GEMINI_API_KEY not set for integration test")
 
 def test_full_graph_run():
     """

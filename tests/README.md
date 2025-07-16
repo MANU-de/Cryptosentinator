@@ -10,7 +10,7 @@ This directory contains the automated tests for the `cryptosentinator` project, 
     ```
 2.  From the root directory of the project (the one containing `cryptosentinator/` and `tests/`), run `pytest`:
     ```bash
-    pytest -v
+    pytest -v  #PYTHONPATH=$(pwd) pytest -v
     ```
     The `-v` flag provides verbose output.
 
