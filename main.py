@@ -7,12 +7,11 @@ from .graph_state import GraphState
 from .agents.data_harvester_agent import data_harvester_agent
 from .agents.nlp_processing_agent import nlp_processing_agent
 from .agents.market_correlation_agent import market_correlation_agent
-#from .config import GEMINI_API_KEY 
 import pprint
 
 GEMINI_API_KEY = get_gemini_api_key()
-print(os.environ.get("GEMINI_API_KEY"))
-print("GEMINI_API_KEY loaded:", GEMINI_API_KEY)  # Debug: Should print your key or None
+# print(os.environ.get("GEMINI_API_KEY"))
+# print("GEMINI_API_KEY loaded:", GEMINI_API_KEY)  # Debug: Should print your key or None
 
 def run_sentiment_analysis_system(keywords: list[str]):
     """
