@@ -2,7 +2,7 @@
 from langchain_core.tools import tool
 from ..config import get_gemini_api_key
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParse
+from langchain_core.output_parsers import JsonOutputParser
 import google.generativeai as genai
 import json
 import re
@@ -75,34 +75,40 @@ def analyze_sentiment_and_extract_entities(text_content: str) -> dict:
 @tool
 def analyze_text_deeply(text_content: str) -> dict:
     """
-    Analyzes text for sentiment, key entities, and topic.
+    Analyzes text for sentiment, key entities, and topic using Gemini.
     Responds with a JSON object containing 'sentiment_score', 'sentiment_label', 
     'entities', and 'topic'.
     """
     print(f"--- TOOL: Deep NLP Analysis for text: '{text_content[:50]}...' ---")
     
-    topic_categories = ["Technology Update", "Price Speculation", "Regulation", "Community Discussion", "Partnership News", "General Market Trend"]
+    topic_categories = [
+        "Technology Update", "Price Speculation", "Regulation", 
+        "Community Discussion", "Partnership News", "General Market Trend"
+    ]
     
-    prompt_template = ChatPromptTemplate.from_messages([
-        ("system", f"""You are a precise financial NLP model. Analyze the text and return a JSON object with four keys:
-        1. 'sentiment_score': A float from -1.0 (very negative) to 1.0 (very positive).
-        2. 'sentiment_label': A string ('Positive', 'Negative', 'Neutral').
-        3. 'entities': A list of key strings (crypto names, projects, events).
-        4. 'topic': Classify the text into ONE of the following categories: {topic_categories}.
-        
-        Respond ONLY with the JSON object."""),
-        ("user", "Text to analyze: {text}")
-    ])
-    
-    parser = JsonOutputParser()
-    chain = prompt_template | llm | parser
+    prompt = (
+        "You are a precise financial NLP model. Analyze the following text and return a JSON object with four keys:\n"
+        "1. 'sentiment_score': A float from -1.0 (very negative) to 1.0 (very positive).\n"
+        "2. 'sentiment_label': A string ('Positive', 'Negative', 'Neutral').\n"
+        "3. 'entities': A list of key strings (crypto names, projects, events).\n"
+        f"4. 'topic': Classify the text into ONE of the following categories: {topic_categories}.\n\n"
+        "Respond ONLY with the JSON object.\n\n"
+        f"Text to analyze: {text_content}"
+    )
 
     try:
-        response = chain.invoke({"text": text_content})
+        response = model.generate_content(prompt)
+        response_text = response.text.strip()
+        response_json = extract_json_from_response(response_text)
         # Basic validation
-        if not all(k in response for k in ['sentiment_score', 'sentiment_label', 'entities', 'topic']):
-            raise ValueError("LLM response missing required keys.")
-        return response
+        required_keys = ['sentiment_score', 'sentiment_label', 'entities', 'topic']
+        if not all(k in response_json for k in required_keys):
+            raise ValueError("Gemini response missing required keys.")
+        if not isinstance(response_json['sentiment_score'], (float, int)):
+            response_json['sentiment_score'] = float(response_json['sentiment_score'])
+        if not isinstance(response_json['entities'], list):
+            response_json['entities'] = [str(response_json['entities'])]
+        return response_json
     except Exception as e:
         print(f"Error in deep NLP tool: {e}. Falling back to neutral.")
         return {

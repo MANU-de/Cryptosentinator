@@ -2,7 +2,7 @@
 import datetime
 import random
 from langchain_core.tools import tool
-from typing import List, Dict
+from typing import List, Dict 
 
 @tool
 def search_x_mock(keyword: str, count: int = 5) -> List[Dict]:

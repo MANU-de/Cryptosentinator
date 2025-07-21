@@ -1,8 +1,9 @@
 
 import random
 from langchain_core.tools import tool
-from typing import Dict
-from graph_state import RawDocument
+#from typing import List, Dict
+from ..graph_state import RawDocument
+from typing import List, Dict
 
 '''@tool
 def get_mock_crypto_price_data(cryptocurrency_symbol: str) -> Dict:

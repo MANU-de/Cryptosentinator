@@ -1,6 +1,6 @@
 # agents/intelligence_analyst_agent.py
-from graph_state import GraphState, ProcessedDocument
-from tools.nlp_tools import analyze_text_deeply
+from ..graph_state import GraphState, ProcessedDocument
+from ..tools.nlp_tools import analyze_text_deeply
 
 class IntelligenceAnalystAgent:
     """The Analyst Agent processes raw data to extract sentiment, entities, and topics."""
@@ -9,7 +9,7 @@ class IntelligenceAnalystAgent:
         raw_documents = state["raw_documents"]
         processed_docs = []
         for doc in raw_documents:
-            nlp_results = analyze_text_deeply.invoke({"text_content": doc["content"]})
+            nlp_results = analyze_text_deeply({"text_content": doc["content"]})
             processed_docs.append(ProcessedDocument(
                 **doc,
                 sentiment_score=nlp_results.get("sentiment_score"),
