@@ -1,4 +1,4 @@
-# graph_state.py
+
 from typing_extensions import List, Dict, TypedDict, Optional
 
 class RawDocument(TypedDict):
