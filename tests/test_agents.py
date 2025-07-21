@@ -8,15 +8,15 @@ def test_data_harvester_agent(mocker):
     """Test the Data Harvester Agent by mocking its tools."""
     # Mock the return values of the search tools
     mocker.patch(
-        'cryptosentinator.agents.data_harvester_agent.search_x_mock.invoke',
+        'cryptosentinator.agents.data_harvester_agent.search_x_mock',
         return_value=[{"source": "X", "content": "x_content", "timestamp": "ts", "keyword": "BTC"}]
     )
     mocker.patch(
-        'cryptosentinator.agents.data_harvester_agent.search_reddit_mock.invoke',
+        'cryptosentinator.agents.data_harvester_agent.search_reddit_mock',
         return_value=[{"source": "Reddit", "content": "reddit_content", "timestamp": "ts", "keyword": "BTC"}]
     )
     mocker.patch(
-        'cryptosentinator.agents.data_harvester_agent.search_news_mock.invoke',
+        'cryptosentinator.agents.data_harvester_agent.search_news_mock',
         return_value=[] # Simulate no news found
     )
 
@@ -39,7 +39,7 @@ def test_nlp_processing_agent(mocker, sample_raw_documents):
         "entities": ["TestEntity"]
     }
     mocker.patch(
-        'cryptosentinator.agents.nlp_processing_agent.analyze_sentiment_and_extract_entities.invoke',
+        'cryptosentinator.agents.nlp_processing_agent.analyze_sentiment_and_extract_entities',
         return_value=mock_nlp_result
     )
 
@@ -63,7 +63,7 @@ def test_market_correlation_agent(mocker, sample_processed_documents):
     # Mock the price data tool
     mock_price_data = {"symbol": "Bitcoin", "price": 50000.0, "24h_change_percent": 5.0}
     mocker.patch(
-        'cryptosentinator.agents.market_correlation_agent.get_mock_crypto_price_data.invoke',
+        'cryptosentinator.agents.market_correlation_agent.get_mock_crypto_price_data',
         return_value=mock_price_data
     )
 

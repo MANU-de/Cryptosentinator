@@ -1,6 +1,8 @@
 # tools/nlp_tools.py
 from langchain_core.tools import tool
 from ..config import get_gemini_api_key
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import JsonOutputParse
 import google.generativeai as genai
 import json
 import re
@@ -24,7 +26,7 @@ def extract_json_from_response(response_text: str) -> dict:
     # Try to parse
     return json.loads(json_str)
 
-@tool
+'''@tool
 def analyze_sentiment_and_extract_entities(text_content: str) -> dict:
     """
     Analyzes the sentiment of a given text and extracts key entities
@@ -68,8 +70,47 @@ def analyze_sentiment_and_extract_entities(text_content: str) -> dict:
                 print("Gemini NLP tool failed after retries. Returning neutral sentiment and no entities.")
                 return {"sentiment_score": 0.0, "sentiment_label": "Neutral", "entities": []}
 
-    return {"sentiment_score": 0.0, "sentiment_label": "Neutral", "entities": []}
+    return {"sentiment_score": 0.0, "sentiment_label": "Neutral", "entities": []} '''
 
+@tool
+def analyze_text_deeply(text_content: str) -> dict:
+    """
+    Analyzes text for sentiment, key entities, and topic.
+    Responds with a JSON object containing 'sentiment_score', 'sentiment_label', 
+    'entities', and 'topic'.
+    """
+    print(f"--- TOOL: Deep NLP Analysis for text: '{text_content[:50]}...' ---")
+    
+    topic_categories = ["Technology Update", "Price Speculation", "Regulation", "Community Discussion", "Partnership News", "General Market Trend"]
+    
+    prompt_template = ChatPromptTemplate.from_messages([
+        ("system", f"""You are a precise financial NLP model. Analyze the text and return a JSON object with four keys:
+        1. 'sentiment_score': A float from -1.0 (very negative) to 1.0 (very positive).
+        2. 'sentiment_label': A string ('Positive', 'Negative', 'Neutral').
+        3. 'entities': A list of key strings (crypto names, projects, events).
+        4. 'topic': Classify the text into ONE of the following categories: {topic_categories}.
+        
+        Respond ONLY with the JSON object."""),
+        ("user", "Text to analyze: {text}")
+    ])
+    
+    parser = JsonOutputParser()
+    chain = prompt_template | llm | parser
+
+    try:
+        response = chain.invoke({"text": text_content})
+        # Basic validation
+        if not all(k in response for k in ['sentiment_score', 'sentiment_label', 'entities', 'topic']):
+            raise ValueError("LLM response missing required keys.")
+        return response
+    except Exception as e:
+        print(f"Error in deep NLP tool: {e}. Falling back to neutral.")
+        return {
+            "sentiment_score": 0.0,
+            "sentiment_label": "Neutral",
+            "entities": [],
+            "topic": "Unclassified"
+        }
 
 # Example of a simpler, non-LLM based sentiment tool (like VADER) if you wanted an alternative
 # from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
