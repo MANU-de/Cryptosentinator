@@ -41,7 +41,7 @@ class StrategistAgent:
         topic_summary = ", ".join(list(set(topics)))
 
         # 2. Get market context
-        market_data = get_mock_crypto_price_data({"cryptocurrency_symbol": keyword})
+        market_data = get_mock_crypto_price_data.invoke({"cryptocurrency_symbol": keyword})
         price = market_data.get("price")
         change = market_data.get("24h_change_percent")
 

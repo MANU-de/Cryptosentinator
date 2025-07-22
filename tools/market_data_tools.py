@@ -1,4 +1,3 @@
-
 import random
 from langchain_core.tools import tool
 

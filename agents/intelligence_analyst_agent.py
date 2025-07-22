@@ -9,7 +9,7 @@ class IntelligenceAnalystAgent:
         raw_documents = state["raw_documents"]
         processed_docs = []
         for doc in raw_documents:
-            nlp_results = analyze_text_deeply({"text_content": doc["content"]})
+            nlp_results = analyze_text_deeply.invoke({"text_content": doc["content"]})
             processed_docs.append(ProcessedDocument(
                 **doc,
                 sentiment_score=nlp_results.get("sentiment_score"),
