@@ -1,0 +1,12 @@
+# pyproject.toml
+[project]
+name = "cryptosentinator"
+version = "0.1.0"
+authors = [
+    { name="Manuela Schrittwieser", email="manuelaschrittwieser@yahoo.com" },
+]
+description = "A multi-agent system for crypto sentiment analysis."
+requires-python = ">=3.9"
+
+[tool.setuptools]
+packages = ["cryptosentinator"]
