@@ -1,6 +1,6 @@
 
-from ..graph_state import GraphState, PerformanceEvaluation
-from ..tools.market_data_tools import get_mock_market_outcome
+from graph_state import GraphState, PerformanceEvaluation
+from tools.market_data_tools import get_mock_market_outcome
 
 class EvaluatorAgent:
     """

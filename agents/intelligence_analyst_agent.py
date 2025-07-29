@@ -1,6 +1,6 @@
 
-from ..graph_state import GraphState, ProcessedDocument
-from ..tools.nlp_tools import analyze_text_deeply
+from graph_state import GraphState, ProcessedDocument
+from tools.nlp_tools import analyze_text_deeply
 
 class IntelligenceAnalystAgent:
     """The Analyst Agent processes raw data to extract sentiment, entities, and topics."""

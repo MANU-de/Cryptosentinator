@@ -1,7 +1,7 @@
 import random
 from langchain_core.tools import tool
 
-from ..graph_state import RawDocument
+from graph_state import RawDocument
 from typing import List, Dict
 
     

@@ -1,6 +1,6 @@
 
 from langchain_core.tools import tool
-from ..config import get_gemini_api_key
+from config import get_gemini_api_key
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 import google.generativeai as genai

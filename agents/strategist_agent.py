@@ -1,9 +1,9 @@
 from langchain_core.tools import tool
-from ..config import get_gemini_api_key
+from config import get_gemini_api_key
 from langchain_core.prompts import ChatPromptTemplate
 import google.generativeai as genai
-from ..graph_state import GraphState, StrategicSummary
-from ..tools.market_data_tools import get_mock_crypto_price_data
+from graph_state import GraphState, StrategicSummary
+from tools.market_data_tools import get_mock_crypto_price_data
 import json
 import re
 

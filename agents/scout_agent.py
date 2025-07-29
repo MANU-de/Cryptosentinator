@@ -1,6 +1,6 @@
 
-from ..graph_state import GraphState, RawDocument
-from ..tools.web_search_tools import search_x_mock, search_reddit_mock, search_news_mock
+from graph_state import GraphState, RawDocument
+from tools.web_search_tools import search_x_mock, search_reddit_mock, search_news_mock
 
 class ScoutAgent:
     """The Scout Agent is responsible for gathering raw intelligence from various sources."""
