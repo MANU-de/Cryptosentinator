@@ -1,13 +1,11 @@
-# tests/test_tools.py (Corrected)
-
 import pytest
 from cryptosentinator.tools import nlp_tools, market_data_tools
 from cryptosentinator.graph_state import RawDocument
 
 def test_analyze_text_deeply_success(mocker):
     """Tests the deep NLP tool by calling its .invoke() method."""
-    # Arrange: Patch the 'llm' object WHERE IT IS USED - inside the nlp_tools module.
-    mock_llm = mocker.patch('cryptosentinator.tools.nlp_tools.llm')
+    # Arrange: Patch the 'model' object WHERE IT IS USED - inside the nlp_tools module.
+    mock_model = mocker.patch('cryptosentinator.tools.nlp_tools.model')
     
     mock_response_dict = {
         "sentiment_score": 0.8,
@@ -17,10 +15,17 @@ def test_analyze_text_deeply_success(mocker):
     }
     
     # Configure the mock's chain behavior.
-    # The chain is `prompt | llm | parser`. We can mock the final parser's output.
-    mock_parser = mocker.patch('cryptosentinator.tools.nlp_tools.JsonOutputParser')
+    # The chain is `prompt | model | parser`. We can mock the final parser's output.
+    mock_parser = mocker.patch('cryptosentinator.tools.nlp_tools.extract_json_from_response')
     mock_parser_instance = mock_parser.return_value
-    mock_parser_instance.invoke.return_value = mock_response_dict
+    mock_parser_instance.return_value = mock_response_dict
+
+    class MockResponse:
+        def __init__(self, text):
+            self.text = text
+
+    mock_response_text = '{"sentiment_score": 0.8, "sentiment_label": "Positive", "entities": ["Bitcoin", "SEC"], "topic": "Regulation"}'
+    mock_model.generate_content.return_value = MockResponse(mock_response_text)
     
     # Act: Call the decorated tool's .invoke() method, which is what agents do.
     result = nlp_tools.analyze_text_deeply.invoke({"text_content": "Some text."})
@@ -30,9 +35,9 @@ def test_analyze_text_deeply_success(mocker):
 
 def test_analyze_text_deeply_failure_fallback(mocker):
     """Tests the deep NLP tool's fallback by calling .invoke()."""
-    # Arrange: Simulate an error during the chain execution by mocking the LLM.
-    mock_llm = mocker.patch('cryptosentinator.tools.nlp_tools.llm')
-    mock_llm.invoke.side_effect = Exception("API Error")
+    # Arrange: Simulate an error during the chain execution by mocking the model.
+    mock_model = mocker.patch('cryptosentinator.tools.nlp_tools.model')
+    mock_model.generate_content.side_effect = Exception("API Error")
 
     # Act: Call the decorated tool's .invoke() method.
     result = nlp_tools.analyze_text_deeply.invoke({"text_content": "Some text."})

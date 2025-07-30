@@ -1,5 +1,5 @@
 
-from graph_state import GraphState, RawDocument
+from cryptosentinator.graph_state import GraphState, RawDocument
 from tools.web_search_tools import search_x_mock, search_reddit_mock, search_news_mock
 
 class ScoutAgent:

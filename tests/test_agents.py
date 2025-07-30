@@ -1,5 +1,3 @@
-# tests/test_agents.py (Corrected)
-
 import pytest
 from cryptosentinator.agents import scout_agent, intelligence_analyst_agent, strategist_agent, evaluator_agent
 
@@ -26,7 +24,6 @@ def test_intelligence_analyst_agent(mocker, mock_raw_docs):
     result_state = intelligence_analyst_agent.intelligence_analyst_agent.run(initial_state)
     assert len(result_state["processed_documents"]) == 2
 
-# --- THIS IS THE CORRECTED TEST FOR THE STRATEGIST AGENT ---
 def test_strategist_agent(mocker, mock_processed_docs):
     """Tests if the Strategist Agent correctly forms a hypothesis."""
     # Arrange
@@ -35,10 +32,16 @@ def test_strategist_agent(mocker, mock_processed_docs):
     mock_price_tool.invoke.return_value = {"price": 1, "24h_change_percent": 1}
     
     # CORRECT: Mock the final parser in the chain to control the output directly.
-    mock_parser = mocker.patch('cryptosentinator.agents.strategist_agent.JsonOutputParser')
+    mock_parser = mocker.patch('cryptosentinator.agents.strategist_agent.model')
     mock_parser_instance = mock_parser.return_value
     mock_llm_summary = {"cryptocurrency": "Bitcoin", "hypothesis": "Test", "confidence": "High", "reasoning": "Test", "supporting_evidence": []}
-    mock_parser_instance.invoke.return_value = mock_llm_summary
+    
+    class MockResponse:
+        def __init__(self, text):
+            self.text = text
+
+    mock_response_text = '{"cryptocurrency": "Bitcoin", "hypothesis": "Test", "confidence": "High", "reasoning": "Test", "supporting_evidence": []}'
+    mock_parser_instance.generate_content.return_value = MockResponse(mock_response_text)
 
     initial_state = {"processed_documents": mock_processed_docs, "keywords": ["Bitcoin"]}
 
