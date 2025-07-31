@@ -32,3 +32,8 @@ All tests are located in the `tests/` directory (a standard practice). To run th
 
 ```bash
 pytest
+
+```
+or
+```bash
+PYTHONPATH=. pytest --maxfail=5 --disable-warnings -q
