@@ -8,7 +8,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="CryptoSentinator v2") as demo:
     gr.Markdown(
         """
         # 🤖 CryptoSentinator v2: The Specialist Crew
-        Enter one cryptocurrency keyword (e.g., Bitcoin, Ethereum) to start the multi-agent analysis.
+        Enter a cryptocurrency keyword (e.g., Bitcoin, Ethereum) to start the multi-agent analysis.
         The system will gather data, analyze sentiment and topics, form a strategic hypothesis, and evaluate its own performance.
         """
     )
@@ -31,8 +31,8 @@ with gr.Blocks(theme=gr.themes.Soft(), title="CryptoSentinator v2") as demo:
     
     with gr.Row():
         keyword_input = gr.Textbox(
-            label="Enter Cryptocurrency Keywords (comma-separated)", 
-            placeholder="e.g., Bitcoin, Solana, XRP"
+            label="Enter Cryptocurrency Keywords", 
+            placeholder="e.g., Bitcoin"
         )
     
     analyze_button = gr.Button("🚀 Analyze Sentiment", variant="primary")
