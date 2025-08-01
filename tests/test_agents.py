@@ -31,17 +31,15 @@ def test_strategist_agent(mocker, mock_processed_docs):
     mock_price_tool = mocker.patch('cryptosentinator.agents.strategist_agent.get_mock_crypto_price_data')
     mock_price_tool.invoke.return_value = {"price": 1, "24h_change_percent": 1}
     
-    # CORRECT: Mock the final parser in the chain to control the output directly.
-    mock_parser = mocker.patch('cryptosentinator.agents.strategist_agent.model')
-    mock_parser_instance = mock_parser.return_value
-    mock_llm_summary = {"cryptocurrency": "Bitcoin", "hypothesis": "Test", "confidence": "High", "reasoning": "Test", "supporting_evidence": []}
+    # CORRECT: Mock the generate_content method directly to control the output.
+    mock_generate_content = mocker.patch('cryptosentinator.agents.strategist_agent.model.generate_content')
+    mock_response_text = '{"cryptocurrency": "Bitcoin", "hypothesis": "Test", "confidence": "High", "reasoning": "Test", "supporting_evidence": []}'
     
     class MockResponse:
         def __init__(self, text):
             self.text = text
 
-    mock_response_text = '{"cryptocurrency": "Bitcoin", "hypothesis": "Test", "confidence": "High", "reasoning": "Test", "supporting_evidence": []}'
-    mock_parser_instance.generate_content.return_value = MockResponse(mock_response_text)
+    mock_generate_content.return_value = MockResponse(mock_response_text)
 
     initial_state = {"processed_documents": mock_processed_docs, "keywords": ["Bitcoin"]}
 
