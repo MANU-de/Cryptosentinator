@@ -16,9 +16,9 @@ def test_analyze_text_deeply_success(mocker):
     
     # Configure the mock's chain behavior.
     # The chain is `prompt | model | parser`. We can mock the final parser's output.
-    mock_parser = mocker.patch('cryptosentinator.tools.nlp_tools.extract_json_from_response')
-    mock_parser_instance = mock_parser.return_value
-    mock_parser_instance.return_value = mock_response_dict
+    mock_parser = mocker.patch('cryptosentinator.tools.nlp_tools.extract_json_from_response', return_value=mock_response_dict)
+    #mock_parser_instance = mock_parser.return_value
+    #mock_parser_instance.return_value = mock_response_dict
 
     class MockResponse:
         def __init__(self, text):
