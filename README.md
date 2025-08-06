@@ -133,7 +133,7 @@ PYTHONPATH=. pytest --maxfail=5 --disable-warnings -q
 
 ```
 
-**🧪 Testing, Validation, and Security**
+## 🧪 Testing, Validation, and Security
 
 This repository contains a comprehensive test suite and follows best practices for security and error handling.
 
