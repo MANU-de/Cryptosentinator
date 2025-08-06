@@ -111,7 +111,7 @@ Follow these instructions to set up and run the project locally.
 The application will automatically load this key. The .gitignore file is already configured to ignore .env files.
 
 ## 🚀 How to Run
-# Run the Interactive UI
+### Run the Interactive UI
 
 To launch the Gradio web interface, run the following command from the project root:
 ```sh
@@ -120,7 +120,7 @@ gradio app.py
 
 Open the local URL provided (e.g., http://127.0.0.1:7860) in your browser.
 
-# Run the Test Suite
+### Run the Test Suite
 To verify the integrity of all components, run the test suite:
 
 ```bash
@@ -137,7 +137,7 @@ PYTHONPATH=. pytest --maxfail=5 --disable-warnings -q
 
 This repository contains a comprehensive test suite and follows best practices for security and error handling.
 
-# Test Suite
+### Test Suite
 
 The project uses pytest for testing. The test suite, located in the /tests directory, provides excellent coverage for all critical components.
 - **Unit Tests:** Each agent's logic and each tool's functionality are tested in isolation.
@@ -149,7 +149,7 @@ The project uses pytest for testing. The test suite, located in the /tests direc
 - **Resilience:** Critical pipeline steps are wrapped in try...except blocks. For example, if an NLP analysis fails, the system returns a neutral default value instead of crashing, ensuring the pipeline can complete.
 - **User Feedback:** Clear error messages are displayed on the UI if a backend process fails, while detailed tracebacks are printed to the console for debugging.
 
-# Security Precautions
+### Security Precautions
 
 - **Secrets Management:** API keys are never hardcoded. The application reads secrets from environment variables. For local development, this is managed via the .env file (which is git-ignored).
 For deployment on platforms like Hugging Face Spaces, secrets are stored securely using the platform's built-in secrets manager.
