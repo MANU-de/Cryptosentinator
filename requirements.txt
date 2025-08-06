@@ -1,0 +1,9 @@
+langchain
+langchain-openai
+langgraph
+python-dotenv
+google-generativeai  
+pytest
+pytest-mock
+gradio
+psycopg2-binary # If you added this for the database
