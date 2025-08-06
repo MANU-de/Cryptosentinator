@@ -143,7 +143,7 @@ The project uses pytest for testing. The test suite, located in the /tests direc
 - **Unit Tests:** Each agent's logic and each tool's functionality are tested in isolation.
 - **Mocking:** All external API calls are mocked using pytest-mock, ensuring tests are fast, deterministic, and free to run.
 
-# Input Validation & Error Handling
+### Input Validation & Error Handling
 
 - **Input Validation:** The Gradio interface provides basic sanitization. The backend create_interactive_pipeline function also checks for empty or invalid user input and returns a user-friendly warning.
 - **Resilience:** Critical pipeline steps are wrapped in try...except blocks. For example, if an NLP analysis fails, the system returns a neutral default value instead of crashing, ensuring the pipeline can complete.
