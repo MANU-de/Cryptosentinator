@@ -36,4 +36,4 @@ pytest
 ```
 or
 ```bash
-PYTHONPATH=. pytest --maxfail=5 --disable-warnings -q --cov=cryptosentinator
+PYTHONPATH=. pytest --maxfail=5 --disable-warnings -q --cov
