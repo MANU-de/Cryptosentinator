@@ -4,12 +4,17 @@ This guide provides instructions and best practices for running and writing test
 
 ## Testing Philosophy
 
-Our testing strategy is centered on unit testing, which ensures that each component (agent or tool) functions correctly in isolation. This approach is crucial for building a reliable and maintainable multi-agent system.
+Our test suite is structured to provide robust coverage at every level:
 
--   **Isolation:** Tests focus on a single unit. External dependencies, particularly network-based services like the OpenAI API, are mocked to ensure tests are fast, deterministic, and free to run.
--   **Readability:** We use `pytest`'s simple `assert` statements and powerful fixture model to create tests that are clean and easy to understand.
--   **Fixtures:** Reusable setup code and data are managed by `pytest` fixtures. This avoids code duplication and makes tests more modular.
+- **Unit Tests:** These are the foundation. They test each individual function and agent method in complete isolation to ensure its logic is correct. All external dependencies (like LLM calls) are mocked.
+- **Integration Tests:** These tests verify the "handoff" between agents. For example, we test that the IntelligenceAnalystAgent can correctly process the exact output format produced by the ScoutAgent. This ensures agents can communicate and work together.
+- **End-to-End (E2E) Tests:** This test simulates a full user journey. It runs the entire LangGraph pipeline from start to finish, mocking only the external APIs. This validates that the complete workflow is connected correctly and produces a final report in the expected format.
 -   **Parametrization:** For components with multiple logical branches (like the `EvaluatorAgent`), we use `pytest.mark.parametrize` to run the same test function with different inputs, leading to comprehensive and efficient test coverage.
+
+-   We use the pytest-cov library to measure how much of our codebase is executed by our tests.
+    High test coverage is a strong indicator of a robust and reliable application. 
+    
+    Our goal is to maintain a coverage of 90% or higher for all critical application logic.
 
 ## Prerequisites & Setup
 
@@ -31,7 +36,7 @@ Before running the tests, you need to install `pytest` and its mocking plugin.
 All tests are located in the `tests/` directory (a standard practice). To run the test suite, navigate to the root directory of the project and execute the following command:
 
 ```bash
-pytest
+pytest --cov=cryptosentinator
 
 ```
 or
