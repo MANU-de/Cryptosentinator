@@ -176,7 +176,8 @@ The codebase is organized to be modular and easy to navigate.
 │   ├── conftest.py          # Shared pytest fixtures (e.g., mock data)
 │   ├── test_agents.py       # Unit tests for agents
 │   └── test_tools.py        # Unit tests for tools
-│   └──  # Expandable
+│   └── test_integration.py  # Integration and End-to-End tests
+|
 ├── .env.example             # Example environment file
 ├── .gitignore               # Specifies files to ignore in git
 ├── app.py                   # Entry point for the Gradio UI application
