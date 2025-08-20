@@ -140,8 +140,10 @@ This repository contains a comprehensive test suite and follows best practices f
 ### Test Suite
 
 The project uses pytest for testing. The test suite, located in the /tests directory, provides excellent coverage for all critical components.
-- **Unit Tests:** Each agent's logic and each tool's functionality are tested in isolation.
-- **Mocking:** All external API calls are mocked using pytest-mock, ensuring tests are fast, deterministic, and free to run.
+
+- **Unit Tests:** These are the foundation. They test each individual function and agent method in complete isolation to ensure its logic is correct. All external dependencies (like LLM calls) are mocked.
+- **Integration Tests:** These tests verify the "handoff" between agents. For example, we test that the IntelligenceAnalystAgent can correctly process the exact output format produced by the ScoutAgent. This ensures agents can communicate and work together.
+- **End-to-End (E2E) Tests:** This test simulates a full user journey. It runs the entire LangGraph pipeline from start to finish, mocking only the external APIs. This validates that the complete workflow is connected correctly and produces a final report in the expected format.
 
 ### Input Validation & Error Handling
 
