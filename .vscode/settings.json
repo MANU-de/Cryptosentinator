@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
-        "cryptosentinator"
+        "cryptosentinator",
+        "genai",
+        "generativeai"
     ],
     "python.testing.unittestArgs": [
         "-v",
