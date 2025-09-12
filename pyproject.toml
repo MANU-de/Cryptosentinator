@@ -10,3 +10,23 @@ requires-python = ">=3.9"
 
 [tool.setuptools]
 packages = ["cryptosentinator"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+source = ["cryptosentinator"]
+omit = [
+    "cryptosentinator/__init__.py",
+    "cryptosentinator/config.py",
+    "cryptosentinator/logging_config.py",
+    "cryptosentinator/main.py", # Assuming this is not the main interactive entrypoint
+]
+
+[tool.coverage.report]
+fail_under = 90  # Fail the build if coverage drops below 90%
+show_missing = true

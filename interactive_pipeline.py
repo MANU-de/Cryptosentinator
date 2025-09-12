@@ -1,6 +1,13 @@
 import dotenv, os
 dotenv.load_dotenv()
 
+# --- NEW: Import custom exceptions (define these in a new errors.py file) ---
+# from cryptosentinator.errors import PipelineExecutionError
+
+# --- NEW: Setup logging at the entry point ---
+from cryptosentinator.logging_config import setup_logging
+setup_logging()
+
 #from .config import get_gemini_api_key
 from langgraph.graph import StateGraph, END
 from graph_state import GraphState
@@ -58,6 +65,12 @@ def create_interactive_pipeline(keywords_string: str) -> str:
     try:
         final_state = app.invoke(initial_state)
     except Exception as e:
+        
+        # In a real app, you might have custom exceptions to catch specific failures
+        # e.g., except APIConnectionError as e:
+        logger.critical(f"A critical error occurred during the analysis pipeline: {e}", exc_info=True)
+        return f"## 🚨 Analysis Failed\n\nA critical error stopped the analysis. This could be due to an API outage or a bug. Please check the logs for details.\n\n**Error:** `{type(e).__name__}`"
+        
         print(f"An error occurred during graph execution: {e}")
         return f"## Analysis Failed\nAn unexpected error occurred during the analysis. Please check the logs.\n\n**Error details:**\n```\n{e}\n```"
 
