@@ -22,9 +22,8 @@ class DeepAnalysisResult(BaseModel):
     sentiment_label: str
     entities: List[str]
     topic: str
-    
-    
-genai.configure(api_key=get_gemini_api_key())
+   
+    llm = genai.configure(api_key=get_gemini_api_key())
 model = genai.GenerativeModel('gemini-2.0-flash')
 
 
@@ -55,24 +54,16 @@ def extract_json_from_response(response_text: str) -> dict:
 
 @tool
 @retry(
-    wait=wait_exponential(multiplier=1, min=2, max=60), # Exponential backoff: 2s, 4s, 8s...
-    stop=stop_after_attempt(3), # Retry up to 3 times
-    retry_error_callback=log_after_retry_failure # Log on final failure
+    wait=wait_exponential(multiplier=1, min=2, max=60),
+    stop=stop_after_attempt(3),
+    retry_error_callback=log_after_retry_failure
 )
 def analyze_text_deeply(text_content: str) -> dict:
-    """
-    Analyzes text for sentiment, key entities, and topic using Gemini.
-    Responds with a JSON object containing 'sentiment_score', 'sentiment_label', 
-    'entities', and 'topic'.
-    """
-    #print(f"--- TOOL: Deep NLP Analysis for text: '{text_content[:50]}...' ---")
     logger.info(f"Analyzing text: '{text_content[:70]}...'")
-    
     topic_categories = [
         "Technology Update", "Price Speculation", "Regulation", 
         "Community Discussion", "Partnership News", "General Market Trend"
     ]
-    
     prompt = (
         "You are a precise financial NLP model. Analyze the following text and return a JSON object with four keys:\n"
         "1. 'sentiment_score': A float from -1.0 (very negative) to 1.0 (very positive).\n"
@@ -82,46 +73,24 @@ def analyze_text_deeply(text_content: str) -> dict:
         "Respond ONLY with the JSON object.\n\n"
         f"Text to analyze: {text_content}"
     )
-    parser = JsonOutputParser(pydantic_object=DeepAnalysisResult) # Bind parser to the model
-    chain = prompt | llm | parser
-
-
     try:
         response = model.generate_content(prompt)
         response_text = response.text.strip()
         response_json = extract_json_from_response(response_text)
-        
-            # Validate and parse the response using Pydantic
-        response = chain.invoke({"text": text_content})
-        # --- NEW: Integrity Check using Pydantic ---
-        # The parser now automatically validates against DeepAnalysisResult.
-        # If the LLM output doesn't match the schema, it will raise a ValidationError.
-        logger.info(f"Successfully analyzed text. Topic: {response['topic']}")
-        return response
+        # Basic validation
+        required_keys = ['sentiment_score', 'sentiment_label', 'entities', 'topic']
+        if not all(k in response_json for k in required_keys):
+            raise ValueError("Gemini response missing required keys.")
+        if not isinstance(response_json['sentiment_score'], (float, int)):
+            response_json['sentiment_score'] = float(response_json['sentiment_score'])
+        if not isinstance(response_json['entities'], list):
+            response_json['entities'] = [str(response_json['entities'])]
+        logger.info(f"Successfully analyzed text. Topic: {response_json['topic']}")
+        return response_json
     except ValidationError as e:
         logger.warning(f"LLM output validation failed for text: '{text_content[:50]}...'. Error: {e}. Falling back.")
         return {"sentiment_score": 0.0, "sentiment_label": "Neutral", "entities": [], "topic": "Unclassified"}
     except Exception as e:
         logger.error(f"An unexpected error occurred during deep analysis: {e}")
-        # Re-raise the exception to allow the @retry decorator to catch it
         raise e
-        
-        
-       # Basic validation
-       # required_keys = ['sentiment_score', 'sentiment_label', 'entities', 'topic']
-       # if not all(k in response_json for k in required_keys):
-       #     raise ValueError("Gemini response missing required keys.")
-       # if not isinstance(response_json['sentiment_score'], (float, int)):
-      #      response_json['sentiment_score'] = float(response_json['sentiment_score'])
-      #  if not isinstance(response_json['entities'], list):
-     #       response_json['entities'] = [str(response_json['entities'])]
-    #    return response_json
-   # except Exception as e:
-    #    print(f"Error in deep NLP tool: {e}. Falling back to neutral.")
-    #    return {
-     #       "sentiment_score": 0.0,
-     #       "sentiment_label": "Neutral",
-      #      "entities": [],
-      #      "topic": "Unclassified"
-      #  }
 
