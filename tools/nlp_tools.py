@@ -22,8 +22,9 @@ class DeepAnalysisResult(BaseModel):
     sentiment_label: str
     entities: List[str]
     topic: str
-   
-    llm = genai.configure(api_key=get_gemini_api_key())
+
+# --- Gemini model setup (move OUTSIDE the class) ---
+genai.configure(api_key=get_gemini_api_key())
 model = genai.GenerativeModel('gemini-2.0-flash')
 
 
@@ -40,7 +41,7 @@ def extract_json_from_response(response_text: str) -> dict:
     """
     Extracts JSON from Gemini's response, even if wrapped in markdown code blocks.
     """
-    # Remove markdown code block if present
+    
     code_block_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", response_text, re.DOTALL)
     if code_block_match:
         json_str = code_block_match.group(1)
