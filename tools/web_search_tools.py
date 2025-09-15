@@ -4,7 +4,7 @@ import random
 from langchain_core.tools import tool
 from typing import List, Dict 
 
-@tool
+@tool(description="Short description.")
 def search_x_mock(keyword: str, count: int = 5) -> List[Dict]:
     """
     Simulates searching X (Twitter) for a keyword.
@@ -28,7 +28,7 @@ def search_x_mock(keyword: str, count: int = 5) -> List[Dict]:
         })
     return tweets
 
-@tool
+@tool(description="Short description.")
 def search_reddit_mock(keyword: str, subreddit: str = "cryptocurrency", count: int = 3) -> List[Dict]:
     """
     Simulates searching Reddit for a keyword in a specific subreddit.
@@ -45,7 +45,7 @@ def search_reddit_mock(keyword: str, subreddit: str = "cryptocurrency", count: i
         })
     return posts
 
-@tool
+@tool(description="Short description.")
 def search_news_mock(keyword: str, count: int = 2) -> List[Dict]:
     """
     Simulates searching news articles for a keyword.

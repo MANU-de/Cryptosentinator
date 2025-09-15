@@ -53,7 +53,7 @@ def extract_json_from_response(response_text: str) -> dict:
     return json.loads(json_str)
 
 
-@tool
+@tool(description="Short description of what this tool does.")
 @retry(
     wait=wait_exponential(multiplier=1, min=2, max=60),
     stop=stop_after_attempt(3),
@@ -78,7 +78,7 @@ def analyze_text_deeply(text_content: str) -> dict:
         response = model.generate_content(prompt)
         response_text = response.text.strip()
         response_json = extract_json_from_response(response_text)
-        # Basic validation
+        
         required_keys = ['sentiment_score', 'sentiment_label', 'entities', 'topic']
         if not all(k in response_json for k in required_keys):
             raise ValueError("Gemini response missing required keys.")

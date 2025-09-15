@@ -17,6 +17,9 @@ from agents.strategist_agent import strategist_agent
 from agents.evaluator_agent import evaluator_agent
 import pprint
 
+import logging
+logger = logging.getLogger(__name__)
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") #or get_gemini_api_key()
 
 
@@ -30,8 +33,7 @@ def create_interactive_pipeline(keywords_string: str) -> str:
     """
     print(f"Received keywords for analysis: {keywords_string}")
     if not GEMINI_API_KEY:
-        #raise ValueError("GEMINI_API_KEY not found. Please set it in your .env file.")
-        return "## Error: `OPENAI_API_KEY` is not set.\nPlease configure it in your environment or secrets."
+        return "## Error: `GEMINI_API_KEY` is not set.\nPlease configure it in your environment or secrets."
     
     if not keywords_string or not keywords_string.strip():
         return "## Warning: No keywords provided.\nPlease enter at least one keyword to start the analysis."
@@ -61,15 +63,11 @@ def create_interactive_pipeline(keywords_string: str) -> str:
     # 2. Run the graph with the user's keywords
     initial_state = {"keywords": target_keywords}
     
-    #final_state = app.invoke(initial_state)
     try:
         final_state = app.invoke(initial_state)
     except Exception as e:
-        
-        # In a real app, you might have custom exceptions to catch specific failures
-        # e.g., except APIConnectionError as e:
         logger.critical(f"A critical error occurred during the analysis pipeline: {e}", exc_info=True)
-        return f"## 🚨 Analysis Failed\n\nA critical error stopped the analysis. This could be due to an API outage or a bug. Please check the logs for details.\n\n**Error:** `{type(e).__name__}`"
+        return f"## 🚨 Analysis Failed\n\nA critical error stopped the analysis. This could be due to an API outage or a bug. Please check the logs for details.\n\n**Error:** `{type(e).__name__}: {e}`"
         
         print(f"An error occurred during graph execution: {e}")
         return f"## Analysis Failed\nAn unexpected error occurred during the analysis. Please check the logs.\n\n**Error details:**\n```\n{e}\n```"

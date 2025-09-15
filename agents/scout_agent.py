@@ -12,9 +12,9 @@ class ScoutAgent:
         for keyword in keywords:
             print(f"Scouting for keyword: {keyword}")
             # This agent could have more complex logic to choose sources, but for now, it hits all.
-            all_raw_docs.extend(search_x_mock.invoke({"keyword": keyword, "count": 2}))
-            all_raw_docs.extend(search_reddit_mock.invoke({"keyword": keyword, "count": 1}))
-            all_raw_docs.extend(search_news_mock.invoke({"keyword": keyword, "count": 1}))
+            all_raw_docs.extend(search_x_mock.run({"keyword": keyword, "count": 2}))
+            all_raw_docs.extend(search_reddit_mock.run({"keyword": keyword, "count": 1}))
+            all_raw_docs.extend(search_news_mock.run({"keyword": keyword, "count": 1}))
         
         return {"raw_documents": [RawDocument(**doc) for doc in all_raw_docs]}
 

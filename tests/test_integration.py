@@ -8,14 +8,17 @@ def test_scout_to_analyst_integration(mocker):
     the output produced by the Scout Agent.
     """
     # Arrange: Mock the external tools for both agents
-    mocker.patch('cryptosentinator.agents.scout_agent.search_x_mock.invoke', return_value=[{"source": "X", "content": "x_content", "timestamp": "", "keyword": "BTC"}])
-    mocker.patch('cryptosentinator.agents.scout_agent.search_reddit_mock.invoke', return_value=[{"source": "Reddit", "content": "reddit_content", "timestamp": "", "keyword": "BTC"}])
-    mocker.patch('cryptosentinator.agents.scout_agent.search_news_mock.invoke', return_value=[])
+    mock_x_tool = mocker.patch('cryptosentinator.agents.scout_agent.search_x_mock')
+    mock_x_tool.run.return_value = [{"source": "X", "content": "x_content", "timestamp": "", "keyword": "BTC"}]
+    mock_reddit_tool = mocker.patch('cryptosentinator.agents.scout_agent.search_reddit_mock')
+    mock_reddit_tool.run.return_value = [{"source": "Reddit", "content": "reddit_content", "timestamp": "", "keyword": "BTC"}]
+    mock_news_tool = mocker.patch('cryptosentinator.agents.scout_agent.search_news_mock')
+    mock_news_tool.run.return_value = []
 
     mock_analyze_tool = mocker.patch('cryptosentinator.agents.intelligence_analyst_agent.analyze_text_deeply')
-    mock_analyze_tool.invoke.return_value = {
-        "sentiment_score": 0.5, "sentiment_label": "Positive", "topic": "Test", "entities": []
-    }
+    mock_analyze_tool.batch.return_value = [
+        {"sentiment_score": 0.5, "sentiment_label": "Positive", "topic": "Test", "entities": []}
+    ]
 
     # Act Part 1: Run the Scout Agent to get its actual output
     scout_state = {"keywords": ["BTC"]}
@@ -43,15 +46,20 @@ def test_full_pipeline_end_to_end(mocker):
     """
     # Arrange: Mock ALL external dependencies across the entire pipeline
     # Scout's tools
-    mocker.patch('cryptosentinator.agents.scout_agent.search_x_mock.invoke', return_value=[{"source": "X", "content": "x_content", "timestamp": "", "keyword": "Bitcoin"}])
-    mocker.patch('cryptosentinator.agents.scout_agent.search_reddit_mock.invoke', return_value=[])
-    mocker.patch('cryptosentinator.agents.scout_agent.search_news_mock.invoke', return_value=[])
+    mock_x_tool = mocker.patch('cryptosentinator.agents.scout_agent.search_x_mock')
+    mock_x_tool.run.return_value = [{"source": "X", "content": "x_content", "timestamp": "", "keyword": "Bitcoin"}]
+    mock_reddit_tool = mocker.patch('cryptosentinator.agents.scout_agent.search_reddit_mock')
+    mock_reddit_tool.run.return_value = []
+    mock_news_tool = mocker.patch('cryptosentinator.agents.scout_agent.search_news_mock')
+    mock_news_tool.run.return_value = []
 
     # Analyst's tool
-    mocker.patch('cryptosentinator.agents.intelligence_analyst_agent.analyze_text_deeply.invoke', return_value={"sentiment_score": 0.8, "sentiment_label": "Positive", "topic": "Tech", "entities": []})
+    mock_analyze_tool = mocker.patch('cryptosentinator.agents.intelligence_analyst_agent.analyze_text_deeply')
+    mock_analyze_tool.batch.return_value = [{"sentiment_score": 0.8, "sentiment_label": "Positive", "topic": "Tech", "entities": []}]
 
     # Strategist's tools
-    mocker.patch('cryptosentinator.agents.strategist_agent.get_mock_crypto_price_data.invoke', return_value={"price": 1, "24h_change_percent": 1})
+    mock_price_tool = mocker.patch('cryptosentinator.agents.strategist_agent.get_mock_crypto_price_data')
+    mock_price_tool.run.return_value = {"price": 1, "24h_change_percent": 1}
     mock_parser = mocker.patch('cryptosentinator.agents.strategist_agent.JsonOutputParser')
     mock_parser_instance = mock_parser.return_value
     mock_parser_instance.return_value = {"cryptocurrency": "Bitcoin", "hypothesis": "E2E Test Success", "confidence": "High", "reasoning": "", "supporting_evidence": []}

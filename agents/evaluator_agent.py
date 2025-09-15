@@ -13,7 +13,7 @@ class EvaluatorAgent:
         raw_documents = state["raw_documents"]
 
         # 1. Get the simulated "ground truth" outcome
-        simulated_outcome = get_mock_market_outcome.invoke({"raw_documents": raw_documents})
+        simulated_outcome = get_mock_market_outcome.run({"raw_documents": raw_documents})
 
         # 2. Evaluate the hypothesis against the outcome
         hypothesis = summary["hypothesis"].lower()

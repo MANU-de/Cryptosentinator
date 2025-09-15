@@ -28,7 +28,7 @@ def test_analyze_text_deeply_success(mocker):
     mock_model.generate_content.return_value = MockResponse(mock_response_text)
     
     # Act: Call the decorated tool's .invoke() method, which is what agents do.
-    result = nlp_tools.analyze_text_deeply.invoke({"text_content": "Some text."})
+    result = nlp_tools.analyze_text_deeply.run({"text_content": "Some text."})
 
     # Assert
     assert result == mock_response_dict
@@ -37,10 +37,10 @@ def test_analyze_text_deeply_failure_fallback(mocker):
     """Tests the deep NLP tool's fallback by calling .invoke()."""
     # Arrange: Simulate an error during the chain execution by mocking the model.
     mock_model = mocker.patch('cryptosentinator.tools.nlp_tools.model')
-    mock_model.generate_content.side_effect = Exception("API Error")
+    mock_model.generate_content.side_effect = ValidationError("API Error")
 
     # Act: Call the decorated tool's .invoke() method.
-    result = nlp_tools.analyze_text_deeply.invoke({"text_content": "Some text."})
+    result = nlp_tools.analyze_text_deeply.run({"text_content": "Some text."})
 
     # Assert
     assert result["sentiment_score"] == 0.0
@@ -60,7 +60,7 @@ def test_get_mock_market_outcome(doc_dicts, expected_substring):
     typed_docs = [RawDocument(**doc) for doc in doc_dicts]
 
     # Act: Call the .invoke() method with the correctly typed data.
-    outcome = market_data_tools.get_mock_market_outcome.invoke({"raw_documents": typed_docs})
+    outcome = market_data_tools.get_mock_market_outcome.run({"raw_documents": typed_docs})
     
     # Assert
     assert expected_substring in outcome

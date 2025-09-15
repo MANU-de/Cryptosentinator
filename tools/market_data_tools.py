@@ -5,7 +5,7 @@ from graph_state import RawDocument
 from typing import List, Dict
 
     
-@tool
+@tool(description="Short description.")
 def get_mock_crypto_price_data(cryptocurrency_symbol: str) -> Dict:
     """Simulates fetching current cryptocurrency price data."""
     
@@ -18,7 +18,7 @@ def get_mock_crypto_price_data(cryptocurrency_symbol: str) -> Dict:
         "24h_change_percent": round(change, 2)
     }
 
-@tool
+@tool(description="Short description.")
 def get_mock_market_outcome(raw_documents: List[RawDocument]) -> str:
     """
     Simulates a realistic market outcome 24 hours later based on the
