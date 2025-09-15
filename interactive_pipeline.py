@@ -5,7 +5,7 @@ dotenv.load_dotenv()
 # from cryptosentinator.errors import PipelineExecutionError
 
 # --- NEW: Setup logging at the entry point ---
-from cryptosentinator.logging_config import setup_logging
+from logging_config import setup_logging
 setup_logging()
 
 #from .config import get_gemini_api_key
