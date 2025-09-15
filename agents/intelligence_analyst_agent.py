@@ -18,6 +18,14 @@ class IntelligenceAnalystAgent:
 
         processed_docs: List[ProcessedDocument] = []
         for doc, result in zip(raw_documents, batch_results):
+            # Defensive check: if result is a string, parse it as JSON
+            if isinstance(result, str):
+                import json
+                try:
+                    result = json.loads(result)
+                except Exception as e:
+                    logger.error(f"Failed to parse analysis result JSON: {e}")
+                    result = {"sentiment_score": 0.0, "sentiment_label": "Neutral", "topic": "Unclassified", "entities": []}
             processed_docs.append(ProcessedDocument(
                 **doc,
                 sentiment_score=result.get("sentiment_score"),

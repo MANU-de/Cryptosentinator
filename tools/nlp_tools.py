@@ -88,10 +88,7 @@ def analyze_text_deeply(text_content: str) -> dict:
             response_json['entities'] = [str(response_json['entities'])]
         logger.info(f"Successfully analyzed text. Topic: {response_json['topic']}")
         return response_json
-    except ValidationError as e:
-        logger.warning(f"LLM output validation failed for text: '{text_content[:50]}...'. Error: {e}. Falling back.")
-        return {"sentiment_score": 0.0, "sentiment_label": "Neutral", "entities": [], "topic": "Unclassified"}
     except Exception as e:
-        logger.error(f"An unexpected error occurred during deep analysis: {e}")
-        raise e
+        logger.warning(f"LLM call failed for text: '{text_content[:50]}...'. Error: {e}. Falling back.")
+        return {"sentiment_score": 0.0, "sentiment_label": "Neutral", "entities": [], "topic": "Unclassified"}
 

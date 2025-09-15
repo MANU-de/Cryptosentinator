@@ -1,5 +1,6 @@
 import pytest
-from cryptosentinator.tools import nlp_tools, market_data_tools
+from pydantic import ValidationError
+from cryptosentinator.tools import nlp_tools, market_data_tools, web_search_tools
 from cryptosentinator.graph_state import RawDocument
 
 def test_analyze_text_deeply_success(mocker):
@@ -37,7 +38,7 @@ def test_analyze_text_deeply_failure_fallback(mocker):
     """Tests the deep NLP tool's fallback by calling .invoke()."""
     # Arrange: Simulate an error during the chain execution by mocking the model.
     mock_model = mocker.patch('cryptosentinator.tools.nlp_tools.model')
-    mock_model.generate_content.side_effect = ValidationError("API Error")
+    mock_model.generate_content.side_effect = Exception("API Error")
 
     # Act: Call the decorated tool's .invoke() method.
     result = nlp_tools.analyze_text_deeply.run({"text_content": "Some text."})
@@ -61,6 +62,37 @@ def test_get_mock_market_outcome(doc_dicts, expected_substring):
 
     # Act: Call the .invoke() method with the correctly typed data.
     outcome = market_data_tools.get_mock_market_outcome.run({"raw_documents": typed_docs})
-    
+
     # Assert
     assert expected_substring in outcome
+
+def test_get_mock_crypto_price_data():
+    """Test the mock crypto price data tool."""
+    result = market_data_tools.get_mock_crypto_price_data.run({"cryptocurrency_symbol": "BTC"})
+    assert "symbol" in result
+    assert result["symbol"] == "BTC"
+    assert isinstance(result["price"], float)
+    assert isinstance(result["24h_change_percent"], float)
+
+def test_search_x_mock():
+    """Test the mock X search tool."""
+    results = web_search_tools.search_x_mock.run({"keyword": "BTC", "count": 2})
+    assert len(results) == 2
+    for res in results:
+        assert res["source"] == "X"
+        assert "BTC" in res["content"]
+        assert res["keyword"] == "BTC"
+
+def test_search_reddit_mock():
+    """Test the mock Reddit search tool."""
+    results = web_search_tools.search_reddit_mock.run({"keyword": "BTC", "subreddit": "crypto", "count": 1})
+    assert len(results) == 1
+    assert results[0]["source"] == "Reddit"
+    assert "BTC" in results[0]["content"]
+
+def test_search_news_mock():
+    """Test the mock news search tool."""
+    results = web_search_tools.search_news_mock.run({"keyword": "BTC", "count": 1})
+    assert len(results) == 1
+    assert results[0]["source"] == "NewsOutlet"
+    assert "BTC" in results[0]["content"]

@@ -50,7 +50,7 @@ def test_strategist_agent(mocker, mock_processed_docs):
     summary = result_state["strategic_summaries"][0]
     assert summary["hypothesis"] == "Test"
     assert summary["confidence"] == "High"
-    mock_price_tool.invoke.assert_called_once() # Verify the tool was called.
+    mock_price_tool.run.assert_called_once() # Verify the tool was called.
 
 @pytest.mark.parametrize("hypothesis, outcome, expected_result, expected_notes_substr", [
     ("bullish increase", "Positive price movement (+5%)", "Correct", "correctly predicted"),
@@ -67,3 +67,28 @@ def test_evaluator_agent(mocker, mock_strategist_summary, hypothesis, outcome, e
     evaluation = result_state["evaluation"]
     assert evaluation["evaluation_result"] == expected_result
     assert expected_notes_substr in evaluation["evaluation_notes"]
+
+def test_intelligence_analyst_agent_empty_documents(mocker):
+    """Tests the Analyst Agent with empty raw documents."""
+    mock_analyze_tool = mocker.patch('cryptosentinator.agents.intelligence_analyst_agent.analyze_text_deeply')
+    mock_analyze_tool.batch.return_value = []
+    initial_state = {"raw_documents": []}
+    result_state = intelligence_analyst_agent.intelligence_analyst_agent.run(initial_state)
+    assert result_state["processed_documents"] == []
+
+def test_strategist_agent_empty_documents(mocker):
+    """Tests the Strategist Agent with empty processed documents."""
+    mock_price_tool = mocker.patch('cryptosentinator.agents.strategist_agent.get_mock_crypto_price_data')
+    mock_price_tool.run.return_value = {"price": 1, "24h_change_percent": 1}
+    mock_model = mocker.patch('cryptosentinator.agents.strategist_agent.model')
+
+    class MockResponse:
+        def __init__(self, text):
+            self.text = text
+
+    mock_model.generate_content.return_value = MockResponse('{"cryptocurrency": "Bitcoin", "hypothesis": "Test", "confidence": "High", "reasoning": "Test", "supporting_evidence": []}')
+
+    initial_state = {"processed_documents": [], "keywords": ["Bitcoin"]}
+    result_state = strategist_agent.strategist_agent.run(initial_state)
+    # Should still return a summary, perhaps with default values
+    assert "strategic_summaries" in result_state

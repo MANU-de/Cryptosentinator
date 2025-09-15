@@ -1,13 +1,13 @@
 import dotenv, os
 dotenv.load_dotenv()
 
-from .config import get_gemini_api_key
+from config import get_gemini_api_key
 from langgraph.graph import StateGraph, END
-from .graph_state import GraphState
-from .agents.scout_agent import scout_agent
-from .agents.intelligence_analyst_agent import intelligence_analyst_agent
-from .agents.strategist_agent import strategist_agent
-from .agents.evaluator_agent import evaluator_agent
+from graph_state import GraphState
+from agents.scout_agent import scout_agent
+from agents.intelligence_analyst_agent import intelligence_analyst_agent
+from agents.strategist_agent import strategist_agent
+from agents.evaluator_agent import evaluator_agent
 import pprint
 
 GEMINI_API_KEY = get_gemini_api_key()
