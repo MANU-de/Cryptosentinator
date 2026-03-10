@@ -9,7 +9,7 @@ import re
 
 
 genai.configure(api_key=get_gemini_api_key())
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-3.1-flash-lite-preview')
 
 def extract_json_from_response(response_text: str) -> dict:
     """Extracts the first JSON object found in a string."""

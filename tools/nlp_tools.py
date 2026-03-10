@@ -25,7 +25,7 @@ class DeepAnalysisResult(BaseModel):
 
 # --- Gemini model setup (move OUTSIDE the class) ---
 genai.configure(api_key=get_gemini_api_key())
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-3.1-flash-lite-preview')
 
 
 # --- NEW: retry_error_callback function for logging ---

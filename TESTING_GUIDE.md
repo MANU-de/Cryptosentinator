@@ -37,3 +37,5 @@ pytest
 or
 ```bash
 PYTHONPATH=. pytest --maxfail=5 --disable-warnings -q --cov
+
+gradio app.py
