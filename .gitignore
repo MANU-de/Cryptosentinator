@@ -1,4 +1,75 @@
-/.env
-/.venv
-/__pycache__
-/api.py
+# ==========================================
+# Secrets & Environment Variables (CRITICAL)
+# ==========================================
+# Never commit API keys to GitHub or Hugging Face
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Python & Bytecode
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ==========================================
+# Virtual Environments
+# ==========================================
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# ==========================================
+# Project Runtime & Local Cache
+# ==========================================
+# Disk cache created by cache_utils.py
+.cache/
+
+# Gradio cache & temporary upload/flag files
+.gradio/
+flagged/
+
+# Generated runtime exports from the UI download button
+*_intelligence_briefing.md
+
+# Optional: Uncomment if you want each deployment to start with fresh backtest logs
+# backtest_history.jsonl
+
+# ==========================================
+# Testing & Coverage
+# ==========================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ==========================================
+# Build & Packaging
+# ==========================================
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ==========================================
+# IDEs & Editors
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+Thumbs.db
