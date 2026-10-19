@@ -4,6 +4,17 @@ import gradio as gr
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+# ZeroGPU support with local development fallback
+try:
+    import spaces
+except ImportError:
+    class spaces:
+        @staticmethod
+        def GPU(func=None, **kwargs):
+            if func is not None:
+                return func
+            return lambda f: f
+
 from agents.scout_agent import scout_agent
 from agents.intelligence_analyst_agent import intelligence_analyst_agent
 from agents.strategist_agent import strategist_agent
@@ -63,6 +74,7 @@ def create_interactive_chart(processed_docs: list, evaluation: dict):
     return fig
 
 
+@spaces.GPU
 def stream_pipeline(keyword_input: str):
     """
     Generator function that runs the 4-agent cycle sequentially,
@@ -100,7 +112,7 @@ def stream_pipeline(keyword_input: str):
 
     # --- Step 3: Strategist ---
     yield (
-        "### ♟️ `[3/4]` Strategist Agent Active...\n*Formulating multi-timeframe horizon ([24h Tactical], [7d Strategic]) & risk invalidation with Gemini...*",
+        "### ♟️ `[3/4]` Strategist Agent Active...\n*Formulating multi-timeframe horizon ([24h Tactical], [7d Strategic]) & risk invalidation with Gemini/HF Inference...*",
         "",
         None,
         "",
