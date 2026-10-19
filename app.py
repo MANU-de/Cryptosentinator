@@ -225,8 +225,9 @@ with gr.Blocks(theme=gr.themes.Soft(), title="CryptoSentinator v3") as demo:
     analyze_button.click(
         fn=stream_pipeline,
         inputs=keyword_input,
-        outputs=[status_box, output_report, metrics_plot, evidence_box, export_btn]
+        outputs=[status_box, output_report, metrics_plot, evidence_box, export_btn],
+        show_api=False
     )
 
 if __name__ == "__main__":
-    demo.queue().launch()
+    demo.queue().launch(show_api=False)
