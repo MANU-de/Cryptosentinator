@@ -2,6 +2,13 @@
 
 # CryptoSentinator 🤖📈
 
+> [!TIP]
+> 🚀 **CryptoSentinator v3 is now available!**  
+> An upgraded version featuring live on-chain TVL, Binance perpetual funding rates, narrative taxonomy detection, persistent backtesting, and an interactive Plotly UI has been released.  
+> * 🏷️ **Code & Release:** Inspect the [v3.0.0 Release Tag](https://github.com/MANU-de/Cryptosentinator/releases/tag/v3.0.0)  
+> * 🌐 **Live Demo:** Try [CryptoSentinator v3 on Hugging Face Spaces](https://huggingface.co/spaces/manuelaschrittwieser/Cryptosentinator-v3)
+<br>
+
 **A Production-Ready Multi-Agent System for Intelligent Market Sentiment Analysis**
 
 ![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)
