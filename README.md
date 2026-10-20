@@ -15,7 +15,7 @@
 ![Framework](https://img.shields.io/badge/framework-LangGraph-orange)
 ![Gradio](https://img.shields.io/badge/deploy-gradio-brightgreen)
 ![Unit Tests](https://img.shields.io/badge/pytest-all%20passed-brightgreen)
-![GitHub license](https://img.shields.io/badge/License-MIT-yellow.svg)
+![GitHub license](https://img.shields.io/badge/License-Apache2.0-yellow.svg)
 
 An advanced multi-agent system that analyzes cryptocurrency sentiment with deep context.
 Cryptosentinator uses a crew of specialized AI agents to gather data, perform nuanced NLP analysis, formulate strategic market hypotheses, and immediately evaluate its own performance.
